@@ -117,4 +117,35 @@ app.delete("/delete-booking/:id", async (req, res) => {
         return responseErrorFromServer(res, "can't not delete booking")
     }
 })
+
+
+// create api for search location 
+app.post("/create-location",async (req, res) => {
+    try {
+        await database.collection("locations").doc(`/${Date.now()}/`).create({
+            id: Date.now(),
+            name: req.body.name,
+            type:req.body.type,
+            path: req.body.path,
+            code: req.body.code,
+            detail: req.body.detail,
+        })
+        return responseSuccess(res, "create location success")
+    } catch (error) {
+        return responseErrorFromServer(res, "can't not create location")
+    }
+})
+
+// get all location from collection locations
+app.get("/locations",async (req, res) => {
+    try {
+        const reqDoc = await database.collection("locations").get()
+        const locations = reqDoc.docs.map((doc) => {
+            return doc.data()
+        })
+        return responseDataSuccess(res, locations, "get all location success")
+    } catch (error) {
+        return responseErrorFromServer(res, "can't not get locations")
+    }
+})
 exports.app = functions.https.onRequest(app)
