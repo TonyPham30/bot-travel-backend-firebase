@@ -148,4 +148,4 @@ app.get("/locations",async (req, res) => {
         return responseErrorFromServer(res, "can't not get locations")
     }
 })
-exports.app = functions.https.onRequest(app)
+exports.endpoint = functions.https.onRequest(app)
